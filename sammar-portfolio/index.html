@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sammar | AI Engineer Portfolio</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Three.js for 3D Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #080811;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glass {
+      background: rgba(17, 24, 39, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card {
+      background: rgba(23, 27, 44, 0.5);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.2);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #080811;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f293d;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen selection:bg-indigo-500 selection:text-white">
+
+  <!-- 3D Canvas Background (Three.js) -->
+  <div id="canvas-container"></div>
+
+  <!-- Main Content Overlay -->
+  <div class="relative z-10 flex flex-col min-h-screen">
+    
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-40 glass border-b border-white/10 px-6 py-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center font-bold text-xl text-white shadow-lg shadow-indigo-500/30">
+            S
+          </div>
+          <span class="text-xl font-extrabold tracking-tight">SAMMAR<span class="text-indigo-400">.AI</span></span>
+        </div>
+
+        <div class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-300">
+          <a href="#about" class="hover:text-white transition">About</a>
+          <a href="#projects" class="hover:text-white transition">Projects</a>
+          <a href="#achievements" class="hover:text-white transition">Achievements</a>
+          <a href="#contact" class="hover:text-white transition">Contact</a>
+        </div>
+
+        <button onclick="openAuthModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold glass border border-indigo-500/30 hover:border-indigo-500 text-indigo-300 hover:text-white transition shadow-lg shadow-indigo-500/10">
+          <i data-lucide="lock" class="w-4 h-4"></i> Admin Panel
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-36 pb-20 px-6 max-w-7xl mx-auto flex-1 flex flex-col justify-center items-center text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-indigo-500/30 text-xs text-indigo-300 mb-8 animate-pulse">
+        <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i> Next-Gen AI & Agentic Workflows Developer
+      </div>
+      
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight mb-6">
+        Hi, I'm <span class="gradient-text">Sammar</span><br />
+        AI Engineer & Architect
+      </h1>
+      
+      <p class="max-w-2xl text-gray-400 text-lg md:text-xl leading-relaxed mb-10">
+        Specializing in building autonomous AI agents, Machine Learning, Deep Learning, Production RAG Pipelines, Multi-Agent Orchestration, and high-performance backend systems.
+      </p>
+
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="#projects" class="px-8 py-4 rounded-xl gradient-bg font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-105 transition">
+          View Projects
+        </a>
+        <a href="https://wa.me/923014095463" target="_blank" class="px-8 py-4 rounded-xl glass border border-emerald-500/30 font-bold text-emerald-400 hover:bg-emerald-500/10 hover:scale-105 transition flex items-center gap-2">
+          <i data-lucide="message-square" class="w-5 h-5"></i> Chat on WhatsApp
+        </a>
+      </div>
+    </section>
+
+    <!-- Tech Stack / Tools -->
+    <section class="py-12 border-y border-white/5 bg-black/20">
+      <div class="max-w-7xl mx-auto px-6">
+        <p class="text-center text-xs font-semibold uppercase tracking-widest text-gray-500 mb-8">Core Technologies & Tools</p>
+        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 text-gray-400 font-semibold">
+          <span class="hover:text-indigo-400 transition">Python</span>
+          <span class="hover:text-indigo-400 transition">Machine Learning (ML)</span>
+          <span class="hover:text-indigo-400 transition">Deep Learning (DL)</span>
+          <span class="hover:text-indigo-400 transition">FastAPI</span>
+          <span class="hover:text-indigo-400 transition">LangChain & LangGraph</span>
+          <span class="hover:text-indigo-400 transition">Vector Databases</span>
+          <span class="hover:text-indigo-400 transition">Docker & Linux</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 px-6 max-w-7xl mx-auto w-full">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+        <div>
+          <h2 class="text-3xl md:text-5xl font-extrabold mb-4">Featured <span class="gradient-text">Projects</span></h2>
+          <p class="text-gray-400">Explore my AI applications, ML/DL models, agentic tools, and backend solutions.</p>
+        </div>
+      </div>
+
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Projects populated via JS -->
+      </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="py-24 px-6 max-w-7xl mx-auto w-full">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-5xl font-extrabold mb-4">Milestones & <span class="gradient-text">Achievements</span></h2>
+        <p class="text-gray-400">Key accomplishments, certifications, and awards in the AI & ML domain.</p>
+      </div>
+
+      <div id="achievements-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Achievements populated via JS -->
+      </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact" class="border-t border-white/10 glass mt-auto py-16 px-6">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h3 class="text-3xl font-extrabold mb-2">Let's Build Something <span class="gradient-text">Intelligent</span></h3>
+          <p class="text-gray-400 text-sm max-w-md mb-6">Have an AI, ML, or DL project in mind? Reach out through any of the channels below.</p>
+          <div class="flex items-center gap-2 text-indigo-300 text-sm">
+            <i data-lucide="phone" class="w-4 h-4"></i> +92 301 4095463
+          </div>
+        </div>
+        
+        <div class="flex flex-wrap md:justify-end items-center gap-4">
+          <a href="https://wa.me/923014095463" target="_blank" class="px-5 py-3 rounded-xl glass border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 transition flex items-center gap-2 font-medium text-sm">
+            <i data-lucide="message-circle" class="w-5 h-5 text-emerald-400"></i> WhatsApp
+          </a>
+
+          <a href="https://github.com/AI-Engineer-Sammar" target="_blank" class="px-5 py-3 rounded-xl glass border border-white/10 text-gray-200 hover:bg-white/10 transition flex items-center gap-2 font-medium text-sm">
+            <i data-lucide="github" class="w-5 h-5 text-indigo-400"></i> GitHub
+          </a>
+
+          <a href="https://linkedin.com" target="_blank" class="px-5 py-3 rounded-xl glass border border-white/10 text-gray-200 hover:bg-white/10 transition flex items-center gap-2 font-medium text-sm">
+            <i data-lucide="linkedin" class="w-5 h-5 text-blue-400"></i> LinkedIn
+          </a>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto border-t border-white/5 mt-12 pt-6 text-center text-xs text-gray-500">
+        © 2026 Sammar. All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <!-- CERTIFICATE VIEW MODAL -->
+  <div id="cert-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+    <div class="glass max-w-2xl w-full p-6 rounded-3xl border border-white/10 relative shadow-2xl flex flex-col items-center">
+      <button onclick="closeCertModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-full bg-black/40">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <h3 id="cert-modal-title" class="text-xl font-bold mb-4 text-center gradient-text">Certificate View</h3>
+      
+      <div class="w-full overflow-hidden rounded-2xl border border-white/10 bg-black/50 p-2">
+        <img id="cert-modal-img" src="" alt="Certificate" class="w-full h-auto max-h-[70vh] object-contain rounded-xl">
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION MODAL -->
+  <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+    <div class="glass max-w-md w-full p-8 rounded-3xl border border-white/10 relative shadow-2xl">
+      <button onclick="closeAuthModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <div class="text-center mb-8">
+        <div class="w-12 h-12 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/30">
+          <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+        </div>
+        <h3 class="text-2xl font-bold">Admin Login</h3>
+        <p class="text-xs text-gray-400 mt-1">Authorized access only</p>
+      </div>
+
+      <form id="auth-form" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Username / Email</label>
+          <input type="text" id="admin-email" required placeholder="Enter admin username" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Password</label>
+          <input type="password" id="admin-password" required placeholder="Enter admin password" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition">
+        </div>
+        
+        <p id="auth-error" class="text-red-400 text-xs hidden text-center">Invalid credentials. Access denied.</p>
+
+        <button type="submit" class="w-full py-3 rounded-xl gradient-bg font-bold text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition mt-2">
+          Authenticate
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD MODAL -->
+  <div id="admin-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg hidden overflow-y-auto">
+    <div class="glass max-w-3xl w-full p-8 rounded-3xl border border-white/10 relative my-8 shadow-2xl">
+      
+      <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
+        <div>
+          <h2 class="text-2xl font-bold flex items-center gap-2">
+            <i data-lucide="layout-dashboard" class="text-indigo-400"></i> Admin Dashboard
+          </h2>
+          <p class="text-xs text-gray-400 mt-1">Welcome, Sammar! Add new projects or achievements directly to your portfolio.</p>
+        </div>
+        <button onclick="closeAdminDashboard()" class="px-4 py-2 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500/30 text-xs font-semibold border border-red-500/30 transition">
+          Exit Dashboard
+        </button>
+      </div>
+
+      <!-- Add Form Section -->
+      <div class="space-y-6">
+        <!-- Add Project Form -->
+        <div class="glass-card p-6 rounded-2xl">
+          <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-indigo-400">
+            <i data-lucide="folder-plus" class="w-5 h-5"></i> Add New Project
+          </h3>
+          <form onsubmit="handleAddProject(event)" class="space-y-4">
+            <div>
+              <input type="text" id="project-title" required placeholder="Project Title" class="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="url" id="project-url" required placeholder="Project URL (e.g. GitHub/Live link)" class="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm">
+              <input type="text" id="project-tools" required placeholder="Tools used (e.g. ML, DL, Python, FastAPI)" class="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm">
+            </div>
+            <div>
+              <textarea id="project-desc" required rows="3" placeholder="Project Description" class="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm"></textarea>
+            </div>
+            <button type="submit" class="px-6 py-2.5 rounded-xl gradient-bg text-sm font-bold text-white shadow-md hover:scale-105 transition">
+              Publish Project
+            </button>
+          </form>
+        </div>
+
+        <!-- Add Achievement Form (WITH FILE UPLOAD BUTTON) -->
+        <div class="glass-card p-6 rounded-2xl">
+          <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-purple-400">
+            <i data-lucide="award" class="w-5 h-5"></i> Add New Achievement & Certificate
+          </h3>
+          <form onsubmit="handleAddAchievement(event)" class="space-y-4">
+            <div>
+              <input type="text" id="achievement-title" required placeholder="Achievement Title" class="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm">
+            </div>
+
+            <!-- FILE UPLOAD INPUT -->
+            <div class="space-y-2">
+              <label class="block text-xs font-medium text-gray-300">Upload Certificate File (From Laptop/Folder)</label>
+              <div class="flex items-center gap-3">
+                <input type="file" id="achievement-cert-file" accept="image/*" class="block w-full text-xs text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer bg-black/30 rounded-xl border border-white/10">
+              </div>
+              <p class="text-[11px] text-gray-500">یا اگر آپ کے پاس آن لائن URL ہے تو نیچے درج کریں:</p>
+              <input type="url" id="achievement-cert-url" placeholder="Optional Certificate Image URL" class="w-full px-4 py-2.5 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 text-xs">
+            </div>
+
+            <div>
+              <textarea id="achievement-desc" required rows="2" placeholder="Achievement Details/Description" class="w-full px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm"></textarea>
+            </div>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-sm font-bold text-white shadow-md hover:scale-105 transition">
+              Publish Achievement
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RAG AI ASSISTANT SIDE CHATBOT WIDGET -->
+  <div id="rag-chatbot-container" class="fixed bottom-6 right-6 z-50">
+    <button id="chat-toggle-btn" onclick="toggleChatWindow()" class="w-14 h-14 rounded-full gradient-bg flex items-center justify-center text-white shadow-xl hover:scale-110 transition border border-white/20">
+      <i data-lucide="bot" class="w-7 h-7"></i>
+    </button>
+
+    <div id="chat-window" class="hidden w-80 md:w-96 h-[480px] glass rounded-3xl border border-white/10 flex flex-col shadow-2xl absolute bottom-16 right-0 overflow-hidden">
+      <div class="gradient-bg p-4 flex justify-between items-center text-white">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center font-bold text-sm">
+            <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm">Sammar RAG Assistant</h4>
+            <p class="text-[10px] text-indigo-100 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Knowledge Base Active</p>
+          </div>
+        </div>
+        <button onclick="toggleChatWindow()" class="text-white/80 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+        <div class="flex gap-2 items-start">
+          <div class="w-6 h-6 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-[10px] shrink-0">AI</div>
+          <div class="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5 text-gray-200 leading-relaxed">
+            Hi there! 👋 I am Sammar's RAG AI Assistant. Ask me anything about Sammar's GitHub, LinkedIn, skills, or projects!
+          </div>
+        </div>
+      </div>
+
+      <form onsubmit="handleChatSubmit(event)" class="p-3 border-t border-white/10 glass flex gap-2">
+        <input type="text" id="chat-input" placeholder="Ask about Sammar..." class="flex-1 px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-xs">
+        <button type="submit" class="p-2.5 rounded-xl gradient-bg text-white hover:scale-105 transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    lucide.createIcons();
+
+    const ADMIN_EMAIL = "sammariftikhar724";
+    const ADMIN_PASS = "zxcvbnm!@#";
+
+    let projects = [
+      {
+        title: "Agentic AI Orchestrator",
+        url: "https://github.com/AI-Engineer-Sammar",
+        tools: ["ML/DL", "LangChain", "LangGraph", "FastAPI"],
+        desc: "Autonomous multi-agent architecture capable of complex task planning, retrieval-augmented generation, and execution workflows."
+      },
+      {
+        title: "Medical RAG Platform",
+        url: "https://github.com/AI-Engineer-Sammar",
+        tools: ["Deep Learning", "Gemini API", "ChromaDB", "Python"],
+        desc: "Production-ready PDF Reader & Retrieval Augmented Generation pipeline for analyzing complex clinical medical literature."
+      }
+    ];
+
+    let achievements = [
+      {
+        title: "AI & ML Hackathon Winner",
+        desc: "Engineered a custom agentic multi-workflow backend using FastAPI and Machine Learning pipelines within 24 hours.",
+        certUrl: "https://images.unsplash.com/photo-1589330694653-aded6fac0244?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        title: "Advanced Deep Learning Certification",
+        desc: "Specialized in designing local open-weight model pipelines with structured outputs and neural network optimization.",
+        certUrl: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=800&q=80"
+      }
+    ];
+
+    function renderProjects() {
+      const grid = document.getElementById("projects-grid");
+      grid.innerHTML = projects.map(p => `
+        <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold">${p.title}</h3>
+              <a href="${p.url}" target="_blank" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-indigo-400 transition">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+            <p class="text-gray-400 text-sm mb-6 leading-relaxed">${p.desc}</p>
+          </div>
+          <div>
+            <div class="flex flex-wrap gap-2 pt-4 border-t border-white/5">
+              ${p.tools.map(tool => `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 border border-indigo-500/20 text-indigo-300">${tool.trim()}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderAchievements() {
+      const grid = document.getElementById("achievements-grid");
+      grid.innerHTML = achievements.map((a, index) => `
+        <div class="glass-card p-6 rounded-2xl border-l-4 border-l-purple-500 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold mb-2 flex items-center gap-2">
+              <i data-lucide="award" class="text-purple-400 w-5 h-5"></i> ${a.title}
+            </h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">${a.desc}</p>
+          </div>
+          ${a.certUrl ? `
+            <div class="pt-4 border-t border-white/5 flex justify-end">
+              <button onclick="viewCertificate(${index})" class="px-4 py-2 rounded-xl text-xs font-semibold glass border border-purple-500/30 text-purple-300 hover:text-white hover:bg-purple-500/20 transition flex items-center gap-2">
+                <i data-lucide="image" class="w-4 h-4"></i> View Certificate
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function viewCertificate(index) {
+      const cert = achievements[index];
+      if (cert && cert.certUrl) {
+        document.getElementById("cert-modal-title").innerText = cert.title;
+        document.getElementById("cert-modal-img").src = cert.certUrl;
+        document.getElementById("cert-modal").classList.remove("hidden");
+      }
+    }
+
+    function closeCertModal() {
+      document.getElementById("cert-modal").classList.add("hidden");
+    }
+
+    function openAuthModal() {
+      document.getElementById("auth-modal").classList.remove("hidden");
+    }
+
+    function closeAuthModal() {
+      document.getElementById("auth-modal").classList.add("hidden");
+      document.getElementById("auth-error").classList.add("hidden");
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("admin-email").value;
+      const pass = document.getElementById("admin-password").value;
+
+      if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
+        closeAuthModal();
+        openAdminDashboard();
+        document.getElementById("admin-email").value = "";
+        document.getElementById("admin-password").value = "";
+      } else {
+        document.getElementById("auth-error").classList.remove("hidden");
+      }
+    }
+
+    function openAdminDashboard() {
+      document.getElementById("admin-modal").classList.remove("hidden");
+    }
+
+    function closeAdminDashboard() {
+      document.getElementById("admin-modal").classList.add("hidden");
+    }
+
+    async function handleAddProject(e) {
+      e.preventDefault();
+      const title = document.getElementById("project-title").value;
+      const url = document.getElementById("project-url").value;
+      const tools = document.getElementById("project-tools").value.split(",");
+      const desc = document.getElementById("project-desc").value;
+
+      const newProject = { title, url, tools, desc };
+
+      projects.unshift(newProject);
+      renderProjects();
+      e.target.reset();
+      alert("Project added successfully!");
+    }
+
+    // UPDATED ACHIEVEMENT HANDLER (FILE & URL READING LOGIC)
+    async function handleAddAchievement(e) {
+      e.preventDefault();
+      const title = document.getElementById("achievement-title").value;
+      const desc = document.getElementById("achievement-desc").value;
+      const fileInput = document.getElementById("achievement-cert-file");
+      const urlInput = document.getElementById("achievement-cert-url").value;
+
+      let certUrl = "";
+
+      // 1. Check if user uploaded a file from local laptop
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        
+        // Read file as Base64 Data URL so it works offline and directly inside browser
+        certUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (event) => resolve(event.target.result);
+          reader.readAsDataURL(file);
+        });
+      } 
+      // 2. Fallback to URL if file is not selected
+      else if (urlInput.trim() !== "") {
+        certUrl = urlInput.trim();
+      }
+
+      const newAchievement = { title, desc, certUrl };
+
+      achievements.unshift(newAchievement);
+      renderAchievements();
+      e.target.reset();
+      alert("Achievement and Certificate published successfully!");
+    }
+
+    // CHATBOT ENGINE
+    function toggleChatWindow() {
+      const window = document.getElementById("chat-window");
+      window.classList.toggle("hidden");
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById("chat-input");
+      const userMsg = input.value.trim();
+      if (!userMsg) return;
+
+      appendChatMessage("user", userMsg);
+      input.value = "";
+
+      const msgId = appendChatMessage("ai", "Searching RAG Knowledge Base...");
+
+      try {
+        const response = await fetch('/api/rag', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: userMsg })
+        });
+        if (!response.ok) throw new Error("RAG API offline");
+        const data = await response.json();
+        updateChatMessage(msgId, data.response || "No response.");
+      } catch (err) {
+        const fallbackReply = generateFallbackResponse(userMsg);
+        updateChatMessage(msgId, fallbackReply);
+      }
+    }
+
+    function appendChatMessage(sender, msg) {
+      const chatContainer = document.getElementById("chat-messages");
+      const isUser = sender === "user";
+      const id = "msg-" + Date.now();
+
+      const html = isUser ? `
+        <div class="flex gap-2 items-start justify-end">
+          <div class="bg-indigo-600/60 p-3 rounded-2xl rounded-tr-none border border-indigo-400/20 text-white leading-relaxed">
+            ${msg}
+          </div>
+        </div>
+      ` : `
+        <div class="flex gap-2 items-start">
+          <div class="w-6 h-6 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-[10px] shrink-0">AI</div>
+          <div id="${id}" class="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5 text-gray-200 leading-relaxed">
+            ${msg}
+          </div>
+        </div>
+      `;
+
+      chatContainer.innerHTML += html;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      return id;
+    }
+
+    function updateChatMessage(id, newMsg) {
+      const element = document.getElementById(id);
+      if (element) element.innerHTML = newMsg;
+    }
+
+    function generateFallbackResponse(query) {
+      const q = query.toLowerCase();
+      if (q.includes("github")) return `Explore Sammar's GitHub: <a href="https://github.com/AI-Engineer-Sammar" target="_blank" class="text-indigo-400 underline">github.com/AI-Engineer-Sammar</a>`;
+      if (q.includes("whatsapp") || q.includes("contact")) return `Contact Sammar on WhatsApp: <a href="https://wa.me/923014095463" target="_blank" class="text-emerald-400 underline">+92 301 4095463</a>`;
+      if (q.includes("skill") || q.includes("tech")) return `Sammar specializes in ML, Deep Learning, FastAPI, LangChain, LangGraph, and RAG architectures.`;
+      return `Sammar is an AI Engineer specializing in Autonomous Agents & High-Performance Backends. Feel free to reach out via WhatsApp or GitHub!`;
+    }
+
+    renderProjects();
+    renderAchievements();
+
+    // THREE.JS ANIMATION
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BufferGeometry();
+    const count = 700;
+    const posArray = new Float32Array(count * 3);
+
+    for (let i = 0; i < count * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 15;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+    const material = new THREE.PointsMaterial({
+      size: 0.035,
+      color: 0x6366f1,
+      transparent: true,
+      opacity: 0.8
+    });
+
+    const particlesMesh = new THREE.Points(geometry, material);
+    scene.add(particlesMesh);
+
+    const icoGeometry = new THREE.IcosahedronGeometry(2, 1);
+    const icoMaterial = new THREE.MeshBasicMaterial({
+      color: 0xa855f7,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.25
+    });
+    const icoMesh = new THREE.Mesh(icoGeometry, icoMaterial);
+    scene.add(icoMesh);
+
+    camera.position.z = 5;
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      icoMesh.rotation.x += 0.003;
+      icoMesh.rotation.y += 0.005;
+
+      particlesMesh.rotation.y += 0.001;
+      particlesMesh.rotation.x += 0.0005;
+
+      camera.position.x += (mouseX - camera.position.x) * 0.05;
+      camera.position.y += (-mouseY - camera.position.y) * 0.05;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
